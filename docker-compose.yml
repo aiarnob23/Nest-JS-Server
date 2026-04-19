@@ -1,0 +1,35 @@
+services:
+  app-dev:
+    container_name: nest-js-server
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      target: development
+    env_file:
+      - .env.development
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - db
+    profiles:
+      - dev
+
+  db:
+    image: postgres:17-alpine
+    container_name: nest-js-server-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - nest-js-server-db:/var/lib/postgresql/data
+    profiles:
+      - dev
+
+volumes:
+  nest-js-server-db:
