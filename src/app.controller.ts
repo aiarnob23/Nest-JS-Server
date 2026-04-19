@@ -7,6 +7,8 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return this.appService.getHello();
+    const instance = process.env.INSTANCE_ID ?? 'unknown';
+    console.log('Handled by : ', instance);
+    return `Hello from : ${instance}`;
   }
 }
