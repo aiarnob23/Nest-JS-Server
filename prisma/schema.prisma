@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum NotificationType {
+  EMAIL
+  SMS
+  PUSH
+  WHATSAPP
+  TELEGRAM
+}
+
+enum NotificationStatus {
+  PENDING
+  QUEUED
+  SENT
+  DELIVERED
+  FAILED
+  READ
+  OPENED
+  CLICKED
+  UNSUBSCRIBED
+  ARCHIVED
+  SPAM
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  email       String    @unique
+  name        String?
+  phone       String?
+  address     String?
+  deviceToken String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  notifications Notification[]
+  preferences   UserNotificationPreference[]
+
+  @@index([email])
+}
+
+model UserNotificationPreference {
+  id        Int              @id @default(autoincrement())
+  userId    Int
+  type      NotificationType
+  isEnabled Boolean          @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, type])
+}
+
+model NotificationTemplate {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique
+  name      String   @unique
+  subject   String?
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  notifications Notification[]
+}
+
+model Notification {
+  id         Int              @id @default(autoincrement())
+  userId     Int
+  templateId Int
+  type       NotificationType
+  priority   Priority
+
+  subject String?
+  content String
+  payload Json?
+
+  status     NotificationStatus @default(PENDING)
+  retryCount Int                @default(0)
+
+  createdAt   DateTime  @default(now())
+  sentAt      DateTime?
+  readAt      DateTime?
+  scheduledAt DateTime?
+  expiresAt   DateTime?
+  deletedAt   DateTime?
+
+  user     User                 @relation(fields: [userId], references: [id])
+  template NotificationTemplate @relation(fields: [templateId], references: [id])
+  logs     NotificationLog[]
+
+  @@index([userId, status])
+}
+
+model NotificationLog {
+  id               Int                @id @default(autoincrement())
+  notificationId   Int
+  channel          NotificationType
+  status           NotificationStatus
+  errorMessage     String?
+  provider         String?
+  providerResponse String?
+  createdAt        DateTime           @default(now())
+
+  notification Notification @relation(fields: [notificationId], references: [id])
+}
