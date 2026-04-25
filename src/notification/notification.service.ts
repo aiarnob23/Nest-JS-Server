@@ -40,8 +40,8 @@ export class NotificationService {
     }
 
     //remove subscriber
-    removeSubscriber(subscriber: ISubscriber): void {
-        this.publisher.unsubscribe(subscriber);
+    removeSubscriber(subscriberId: string): void {
+        this.publisher.unsubscribe(subscriberId);
     }
 
 }

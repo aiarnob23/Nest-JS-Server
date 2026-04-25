@@ -11,9 +11,9 @@ export class NotificationPublisher {
         console.log(`[PUBLISHER] Subscriber ${subscriber.id} subscribed to ${subscriber.preferredChannel} channel`);
     }
 
-    unsubscribe(subscriber: ISubscriber): void {
-        this.subscribers.delete(subscriber.id);
-        console.log(`[PUBLISHER] Subscriber ${subscriber.id} unsubscribed from ${subscriber.preferredChannel} channel`);
+    unsubscribe(subscriberId: string): void {
+        this.subscribers.delete(subscriberId);
+        console.log(`[PUBLISHER] Subscriber ${subscriberId} unsubscribed`);
     }
 
     async broadcast(notification: INotification): Promise<void> {

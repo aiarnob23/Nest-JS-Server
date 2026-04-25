@@ -5,6 +5,7 @@ import { NotificationFactory } from "./factory/notification.factory";
 import { EmailStrategy } from "./strategies/email.strategy";
 import { SmsStrategy } from "./strategies/sms.strategy";
 import { PushStrategy } from "./strategies/push.strategy";
+import { NotificationPublisher } from "./observer/notification-publisher";
 
 
 @Module({
@@ -12,6 +13,7 @@ import { PushStrategy } from "./strategies/push.strategy";
     providers:[
         NotificationService,
         NotificationFactory,
+        NotificationPublisher,
         EmailStrategy,
         SmsStrategy,
         PushStrategy
