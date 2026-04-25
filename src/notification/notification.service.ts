@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { NotificationChannel, NotificationFactory } from "./factory/notification.factory";
 import { INotification } from "./interfaces/notification.interface";
 import { NotificationPublisher } from "./observer/notification-publisher";
-import { ISubscriber } from "./interfaces/observer.interface";
 import { UserSubscriber } from "./observer/user-subscriber";
 
 @Injectable()

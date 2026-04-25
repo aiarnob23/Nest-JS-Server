@@ -41,23 +41,23 @@ export class NotificationController {
     constructor(private readonly notificationService: NotificationService) { }
 
     @Post('send')
-    async send(@Body() dto: SendNotificationDto): Promise<{ success: boolean, meta?: string }> {
+    async send(@Body() dto: SendNotificationDto): Promise<{ success: boolean, info?: string }> {
         await this.notificationService.notify(dto.channel, {
             receiver: dto.receiver,
             subject: dto.subject,
             message: dto.message
         });
-        return { success: true, meta: `Notification sent to ${dto.receiver} via ${dto.channel}` };
+        return { success: true, info: `Notification sent to ${dto.receiver} via ${dto.channel}` };
     }
 
     @Post('broadcast')
-    async broadcast(@Body() dto: BroadcastDto): Promise<{ success: boolean }> {
+    async broadcast(@Body() dto: BroadcastDto): Promise<{ success: boolean , info ?: string}> {
         await this.notificationService.broadcast({
             receiver: dto.receiver,
             subject: dto.subject,
             message: dto.message
         });
-        return { success: true };
+        return { success: true , info: `Broadcast sent to ${dto.receiver}` };
     }
 
     @Post('subscribe')
